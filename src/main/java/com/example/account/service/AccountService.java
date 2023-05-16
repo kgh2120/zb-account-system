@@ -14,7 +14,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     @Transactional
-    public void createAccount() {
+    public void createAccount(Long id, Long initialBalance) {
         Account account = Account.builder()
                 .accountNumber("40000")
                 .accountStatus(AccountStatus.IN_USE)
