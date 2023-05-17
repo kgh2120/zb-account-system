@@ -37,11 +37,18 @@ public class AccountService {
         AccountUser user = accountUserRepository.findById(id)
                 .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
 
+        validateCreateAccount(user);
+
         return AccountDto.fromEntity(accountRepository
                 .save(
                         Account.createAccount(user,
                                 initialBalance,
                                 createAccountNumber())));
+    }
+
+    private void validateCreateAccount(AccountUser user) {
+        if(accountRepository.countByAccountUser(user) >= 10)
+            throw new AccountException(ErrorCode.EXCEED_MAX_ACCOUNT_SIZE);
     }
 
     private String createAccountNumber() {
