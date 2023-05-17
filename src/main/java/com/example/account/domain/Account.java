@@ -4,6 +4,7 @@ import com.example.account.type.AccountStatus;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,6 +28,8 @@ public class Account extends BaseEntity{
 
     private Long balance;
 
+    private LocalDateTime unRegisteredAt;
+
 
 
     public static Account createAccount(AccountUser user, Long initialBalance, String accountNumber){
@@ -39,4 +42,8 @@ public class Account extends BaseEntity{
 
     }
 
+    public void unRegister() {
+        accountStatus = AccountStatus.UNREGISTERED;
+        unRegisteredAt = LocalDateTime.now();
+    }
 }

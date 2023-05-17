@@ -1,10 +1,9 @@
 package com.example.account.controller;
 
 import com.example.account.domain.Account;
-import com.example.account.dto.AccountDto;
 import com.example.account.dto.CreateAccount;
+import com.example.account.dto.UnRegisterAccount;
 import com.example.account.service.AccountService;
-import com.example.account.service.RedisTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +33,21 @@ public class AccountController {
                                         request.getInitialBalance())));
     }
 
+    @DeleteMapping("/account")
+    public ResponseEntity<UnRegisterAccount.Response> unregisterAccount(
+            @RequestBody @Valid UnRegisterAccount.Request request
+    ) {
+        return ResponseEntity
+                .ok(UnRegisterAccount.Response
+                        .from(accountService
+                                .unRegisterAccount(request.getUserId(),
+                                        request.getAccountNumber())));
+
+    }
+
     @GetMapping("/account/{id}")
     public Account getAccount(
-            @PathVariable Long id){
+            @PathVariable Long id) {
         return accountService.getAccount(id);
     }
 }

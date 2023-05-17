@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-public class CreateAccount {
+public class UnRegisterAccount {
 
     @Data
     @NoArgsConstructor
@@ -19,9 +21,9 @@ public class CreateAccount {
         @Min(1)
         private Long userId;
 
-        @NotNull
-        @Min(0)
-        private Long initialBalance;
+        @NotBlank
+        @Size(min = 10, max = 10)
+        private String accountNumber;
     }
 
     @Data
@@ -31,13 +33,13 @@ public class CreateAccount {
     public static class Response{
         private Long id;
         private String accountNumber;
-        private LocalDateTime registeredAt;
+        private LocalDateTime unRegisteredAt;
 
         public static Response from(AccountDto accountDto){
             return Response.builder()
                     .id(accountDto.getUserId())
                     .accountNumber(accountDto.getAccountNumber())
-                    .registeredAt(accountDto.getCreatedAt())
+                    .unRegisteredAt(accountDto.getUnRegisteredAt())
                     .build();
 
         }
