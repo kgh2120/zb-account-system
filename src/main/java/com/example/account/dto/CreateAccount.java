@@ -32,5 +32,14 @@ public class CreateAccount {
         private Long id;
         private String accountNumber;
         private LocalDateTime registeredAt;
+
+        public static Response from(AccountDto accountDto){
+            return Response.builder()
+                    .id(accountDto.getUserId())
+                    .accountNumber(accountDto.getAccountNumber())
+                    .registeredAt(accountDto.getCreatedAt())
+                    .build();
+
+        }
     }
 }
