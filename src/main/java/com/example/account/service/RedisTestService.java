@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Service
+//@Service
 @RequiredArgsConstructor
 public class RedisTestService {
     private final RedissonClient redissonClient;

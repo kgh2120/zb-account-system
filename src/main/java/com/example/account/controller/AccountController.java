@@ -5,6 +5,8 @@ import com.example.account.dto.CreateAccount;
 import com.example.account.service.AccountService;
 import com.example.account.service.RedisTestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,18 +15,18 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-    private final RedisTestService redisTestService;
+//    private final RedisTestService redisTestService;
 
-    @GetMapping("/get-lock")
-    public String getLock() {
-        return redisTestService.getLock();
-    }
+//    @GetMapping("/get-lock")
+//    public String getLock() {
+//        return redisTestService.getLock();
+//    }
 
     @PostMapping("/account")
-    public String createAccount(@RequestBody @Valid CreateAccount.Request request) {
+    public ResponseEntity<CreateAccount.Response> createAccount(@RequestBody @Valid CreateAccount.Request request) {
 
-        accountService.createAccount();
-        return "success";
+        CreateAccount.Response response = accountService.createAccount(request.getUserId(), request.getInitialBalance());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/account/{id}")

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class CreateAccount {
@@ -13,7 +15,12 @@ public class CreateAccount {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Request{
-        private Long id;
+        @NotNull
+        @Min(1)
+        private Long userId;
+
+        @NotNull
+        @Min(100)
         private Long initialBalance;
     }
 
