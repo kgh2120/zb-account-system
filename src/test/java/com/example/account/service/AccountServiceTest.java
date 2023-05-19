@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -173,7 +174,7 @@ class AccountServiceTest {
 
     @DisplayName("계좌 해지 - 실패 [유저가 없는 케이스]")
     @Test
-    void unReigsterAccount_Fail_UserNotFound () throws Exception{
+    void unRegisterAccount_Fail_UserNotFound() throws Exception{
         //given
         given(accountUserRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
@@ -298,5 +299,70 @@ class AccountServiceTest {
                 .hasFieldOrPropertyWithValue("errorCode",ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
     }
 
+
+    @DisplayName("계좌 조회 - 성공")
+    @Test
+    void getAllAccountSuccess() throws Exception{
+        //given
+        AccountUser user = AccountUser.builder()
+                .id(1L)
+                .name("Kim")
+                .build();
+        given(accountUserRepository.findById(anyLong()))
+                .willReturn(Optional.of(user));
+
+        Account account1 = Account.builder()
+                .id(1L)
+                .accountStatus(AccountStatus.IN_USE)
+                .balance(1000L)
+                .accountUser(user)
+                .accountNumber("1111111111")
+                .build();
+        Account account2 = Account.builder()
+                .id(1L)
+                .accountStatus(AccountStatus.IN_USE)
+                .balance(2000L)
+                .accountUser(user)
+                .accountNumber("2222222222")
+                .build();
+        Account account3 = Account.builder()
+                .id(1L)
+                .accountStatus(AccountStatus.IN_USE)
+                .balance(3000L)
+                .accountUser(user)
+                .accountNumber("3333333333")
+                .build();
+        given(accountRepository.findByAccountUser(any()))
+                .willReturn(List.of(
+                        account1,
+                        account2,
+                        account3
+                        )
+                );
+
+        //when
+        List<AccountDto> accountInfo = accountService.getAllAccountInfo(1L);
+        //then
+        assertThat(accountInfo)
+                .hasSize(3).
+                contains(AccountDto.fromEntity(account1),
+                        AccountDto.fromEntity(account2),
+                        AccountDto.fromEntity(account3));
+    }
+
+    @DisplayName("계좌 조회 - 실패 [유저가 없는 케이스]")
+    @Test
+    void getAllAccount_fail_UserNotFound () throws Exception{
+        //given
+        given(accountUserRepository.findById(anyLong()))
+                .willReturn(Optional.empty());
+        //when
+        assertThatThrownBy(() -> accountService.getAllAccountInfo(1L))
+                .isInstanceOf(AccountException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
+        //then
+
+
+    }
 
 }

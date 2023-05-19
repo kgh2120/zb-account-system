@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Builder
@@ -26,4 +27,16 @@ public class AccountDto {
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AccountDto that = (AccountDto) o;
+        return Objects.equals(userId, that.userId) && Objects.equals(accountNumber, that.accountNumber) && Objects.equals(balance, that.balance) && Objects.equals(createdAt, that.createdAt) && Objects.equals(unRegisteredAt, that.unRegisteredAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, accountNumber, balance, createdAt, unRegisteredAt);
+    }
 }
