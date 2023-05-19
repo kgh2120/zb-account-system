@@ -1,6 +1,7 @@
 package com.example.account.controller;
 
 import com.example.account.domain.Account;
+import com.example.account.dto.AccountInfo;
 import com.example.account.dto.CreateAccount;
 import com.example.account.dto.UnRegisterAccount;
 import com.example.account.service.AccountService;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +46,15 @@ public class AccountController {
                                 .unRegisterAccount(request.getUserId(),
                                         request.getAccountNumber())));
 
+    }
+    @GetMapping("/account")
+    public ResponseEntity<List<AccountInfo>> getAllAccountInfo(@RequestParam("user_id") long userId){
+        return ResponseEntity.ok(
+                accountService
+                .getAllAccountInfo(userId)
+                .stream()
+                .map(AccountInfo::from)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/account/{id}")

@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.example.account.type.ErrorCode.*;
 
 @Service
@@ -78,6 +81,14 @@ public class AccountService {
         account.unRegister();
 
         return AccountDto.fromEntity(account);
+    }
+
+    public List<AccountDto> getAllAccountInfo(Long userId) {
+        AccountUser user = findUserOrElseThrow(userId);
+        return accountRepository.findByAccountUser(user)
+                .stream()
+                .map(AccountDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     private Account findAccountByAccountNumberOrElseThrow(String accountNumber) {
