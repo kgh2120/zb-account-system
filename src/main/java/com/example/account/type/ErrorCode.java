@@ -14,7 +14,9 @@ public enum ErrorCode {
     BALANCE_REMAIN("계좌에 잔액이 남아있습니다.", HttpStatus.BAD_REQUEST),
     ACCOUNT_ALREADY_UNREGISTERED("계좌가 이미 해지되었습니다.", HttpStatus.BAD_REQUEST),
 
-    EXCEED_MAX_ACCOUNT_SIZE("계좌 보유량 한도를 초과했습니다.", HttpStatus.BAD_REQUEST)
+    EXCEED_MAX_ACCOUNT_SIZE("계좌 보유량 한도를 초과했습니다.", HttpStatus.BAD_REQUEST),
+
+    AMOUNT_EXCEED_BALANCE("거래 금액이 잔액보다 큽니다", HttpStatus.BAD_REQUEST)
 
 
     ;

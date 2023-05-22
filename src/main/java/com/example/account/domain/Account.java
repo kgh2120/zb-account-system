@@ -1,6 +1,8 @@
 package com.example.account.domain;
 
+import com.example.account.exception.AccountException;
 import com.example.account.type.AccountStatus;
+import com.example.account.type.ErrorCode;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,5 +47,12 @@ public class Account extends BaseEntity{
     public void unRegister() {
         accountStatus = AccountStatus.UNREGISTERED;
         unRegisteredAt = LocalDateTime.now();
+    }
+
+    public void useBalance(Long amount){
+        if(amount > balance)
+            throw new AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE);
+
+        balance -= amount;
     }
 }
