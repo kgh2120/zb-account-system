@@ -20,9 +20,6 @@ public class Transaction extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;
-
-    private Long balance;
-
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 

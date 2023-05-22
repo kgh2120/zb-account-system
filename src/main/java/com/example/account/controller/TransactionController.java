@@ -1,6 +1,8 @@
 package com.example.account.controller;
 
+import com.example.account.dto.TransactionDto;
 import com.example.account.dto.UseBalance;
+import com.example.account.exception.AccountException;
 import com.example.account.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,17 +24,27 @@ import javax.validation.Valid;
 @RestController
 public class TransactionController {
 
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
 
     @PostMapping("/transaction/use")
     public ResponseEntity<UseBalance.Response> useBalance(
             @Valid @RequestBody UseBalance.Request request
     ){
+        try {
+            return ResponseEntity.ok(UseBalance.Response
+                    .from(transactionService
+                            .useBalance(request.getUserId(),
+                                    request.getAccountNumber(),
+                                    request.getAmount())));
+        } catch (AccountException e) {
+            log.error("Failed to use Balance");
 
-
-        transactionService.useBalance(request.getUserId(),
-                request.getAccountNumber(),
-                request.getAmount());
+            transactionService.saveFailedUseTransaction(
+                    request.getAccountNumber(),
+                    request.getAmount()
+            );
+            throw e;
+        }
     }
 
 }
