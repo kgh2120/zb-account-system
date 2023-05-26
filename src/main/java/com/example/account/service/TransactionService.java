@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.example.account.type.ErrorCode.AMOUNT_EXCEED_BALANCE;
@@ -72,6 +73,7 @@ public class TransactionService {
                         .account(account)
                         .amount(amount)
                         .balanceSnapshot(account.getBalance())
+                        .transactedAt(LocalDateTime.now())
                         .transactionId(UUID.randomUUID().toString().replace("-", ""))
                         .build()
         );
