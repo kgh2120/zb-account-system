@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.example.account.type.ErrorCode.*;
@@ -45,7 +46,8 @@ public class TransactionService {
 
         account.useBalance(amount);
 
-        return TransactionDto.fromEntity(saveTransaction(amount, account, TransactionResultType.S, TransactionType.USE));
+        return TransactionDto.fromEntity(saveTransaction(amount,
+                account, TransactionResultType.S, TransactionType.USE));
     }
 
     private void validateUseBalance(Long amount, AccountUser user, Account account) {
@@ -66,7 +68,9 @@ public class TransactionService {
         saveTransaction(amount, account, TransactionResultType.F, TransactionType.USE);
     }
 
-    private Transaction saveTransaction(Long amount, Account account, TransactionResultType resultType, TransactionType transactionType) {
+    private Transaction saveTransaction(Long amount, Account account,
+                                        TransactionResultType resultType,
+                                        TransactionType transactionType) {
         return transactionRepository.save(
                 Transaction.builder()
                         .transactionType(transactionType)
@@ -110,5 +114,11 @@ public class TransactionService {
                 .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
 
         saveTransaction(amount, account, TransactionResultType.F, TransactionType.CANCEL);
+    }
+
+    public TransactionDto queryTransaction(String transactionId) {
+        return TransactionDto.fromEntity(
+                transactionRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> new AccountException(TRANSACTION_NOT_FOUND)));
     }
 }
