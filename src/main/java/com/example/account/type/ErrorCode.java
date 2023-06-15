@@ -10,6 +10,7 @@ public enum ErrorCode {
 
     USER_NOT_FOUND("사용자가 없습니다.", HttpStatus.NOT_FOUND),
     ACCOUNT_NOT_FOUND("입력한 계좌 번호에 해당하는 계좌가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    ACCOUNT_TRANSACTION_LOCK("해당 계좌는 사용중입니다.", HttpStatus.BAD_REQUEST),
     TRANSACTION_NOT_FOUND("입력한 거래 번호에 해당하는 거래가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     TRANSACTION_ACCOUNT_UN_MATCH("거래와 계좌번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     TRANSACTION_AMOUNT_UN_MATCH("거래 금액이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),

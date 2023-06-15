@@ -18,12 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-//    private final RedisTestService redisTestService;
 
-//    @GetMapping("/get-lock")
-//    public String getLock() {
-//        return redisTestService.getLock();
-//    }
 
     @PostMapping("/account")
     public ResponseEntity<CreateAccount.Response> createAccount(@RequestBody @Valid CreateAccount.Request request) {
