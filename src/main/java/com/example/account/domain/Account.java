@@ -4,6 +4,7 @@ import com.example.account.exception.AccountException;
 import com.example.account.type.AccountStatus;
 import com.example.account.type.ErrorCode;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,13 +15,9 @@ import static com.example.account.type.ErrorCode.INVALID_REQUEST;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class Account extends BaseEntity{
-    @Id
-    @GeneratedValue
-    private Long id;
-
     private String accountNumber;
 
     @Enumerated(EnumType.STRING)

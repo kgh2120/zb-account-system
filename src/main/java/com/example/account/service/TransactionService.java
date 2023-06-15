@@ -39,8 +39,7 @@ public class TransactionService {
 
         AccountUser user = accountUserRepository.findById(userId)
                 .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = getAccountOrElseThrow(accountNumber);
 
         validateUseBalance(amount, user, account);
 
@@ -62,8 +61,7 @@ public class TransactionService {
 
     @Transactional
     public void saveFailedUseTransaction(String accountNumber, Long amount) {
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = getAccountOrElseThrow(accountNumber);
 
         saveTransaction(amount, account, TransactionResultType.F, TransactionType.USE);
     }
@@ -88,14 +86,18 @@ public class TransactionService {
 
         Transaction transaction = transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(() -> new AccountException(TRANSACTION_NOT_FOUND));
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = getAccountOrElseThrow(accountNumber);
 
         validateCancelBalance(amount, transaction, account);
 
         account.cancelBalance(amount);
 
         return TransactionDto.fromEntity(saveTransaction(amount, account, TransactionResultType.S, TransactionType.CANCEL));
+    }
+
+    private Account getAccountOrElseThrow(String accountNumber) {
+        return accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
     }
 
     private void validateCancelBalance(Long amount, Transaction transaction, Account account) {
@@ -110,8 +112,7 @@ public class TransactionService {
     }
 
     public void saveFailedCancelTransaction(String accountNumber, Long amount) {
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = getAccountOrElseThrow(accountNumber);
 
         saveTransaction(amount, account, TransactionResultType.F, TransactionType.CANCEL);
     }
